@@ -148,16 +148,18 @@ end
 
 class UserQ17
   # 以下に回答を記載
-  def initialize(user)
-    @name = user[:name]
-    @age = user[:age]
-    @gender = user[:gender]
+  def initialize(params)
+    @name = params[:name]
+    @age = params[:age]
+    @gender = params[:gender]
   end
 
   def info
-    puts "名前：#{@name}"
-    puts "年齢：#{@age}"
-    puts "性別：#{@gender}"
+    puts <<~TEXT
+      名前：#{@name}
+      年齢：#{@age}
+      性別：#{@gender}
+    TEXT
   end
 
 end
@@ -174,9 +176,9 @@ end
 
 class UserQ18
   # 以下に回答を記載
-  def initialize(user)
-    @name = user[:name]
-    @age = user[:age]
+  def initialize(name:, age:)
+    @name = name
+    @age = age
   end
   
   def introduce
@@ -196,9 +198,9 @@ end
 
 class Item
   # 以下を修正して下さい
-  attr_accessor :name
-  def initialize(name)
-    @name = name.values
+  attr_reader :name
+  def initialize(name:)
+    @name = name
   end
 end
 
@@ -210,34 +212,37 @@ end
 
 class UserQ20
   # 以下に回答を記載
-  attr_accessor :name, :age
-  def initialize(user)
-    @name = user[:name]
-    @age = user[:age]
+  attr_reader :name, :age
+  def initialize(name:, age:)
+    @name = name
+    @age = age
   end  
 end
 
 class Zoo
   # 以下に回答を記載
-  def initialize(info)
-    @infant = info[:entry_fee][:infant]
-    @children = info[:entry_fee][:children]
-    @adult = info[:entry_fee][:adult]
-    @senior = info[:entry_fee][:senior]
+  def initialize(params)
+    @infant = params[:entry_fee][:infant]
+    @children = params[:entry_fee][:children]
+    @adult = params[:entry_fee][:adult]
+    @senior = params[:entry_fee][:senior]
   end  
 
   def info_entry_fee(user)
-    if user.age >= 0 && user.age <= 5
-      puts "#{user.name}さんの入場料金は #{@infant} 円です"
-    elsif user.age >= 6 && user.age <= 12
-      puts "#{user.name}さんの入場料金は #{@children} 円です"
-    elsif user.age >= 13 && user.age <= 64
-      puts "#{user.name}さんの入場料金は #{@adult} 円です"
-    elsif user.age >= 65 && user.age <= 120
-      puts "#{user.name}さんの入場料金は #{@senior} 円です"
+    @entry_fee = case user.age
+    when 0..5 
+      @infant
+    when 6..12 
+      @children
+    when 13..64 
+      @adult
+    when 65..120 
+      @senior
     end
+    
+    puts "#{user.name}さんの入場料金は #{@entry_fee} 円です"
   end
-  
+    
 end
 
 
